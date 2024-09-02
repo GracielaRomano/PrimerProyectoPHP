@@ -37,38 +37,38 @@
                                         {{ $chirp->user->name }}
                                     </span>
                                     <small class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ $chirp->created_at->format('j M Y, g:i a') }}</small>
-                                    
-
+                                    @if ($chirp->created_at != $chirp->updated_at)
+                                        <small class="text-sm text-gray-600 dark:text-gray-400"> &middot; {{ __('edited') }}</small>
+                                    @endif
                                 </div>
                             </div>
                             <p class="mt-4 text-lg text-gray-900 dark:text-gray-100">{{ $chirp->message }}</p>
                         </div>
-                        <a href="{{ route('chirps.edit', $chirp) }}">{{ __('Edit Chirp') }}</a>
 
-                        @can('update', $chirp)
+                        @can('update', $chirp)                       
+                                    <!-- o se puede utilizar este condicional @if (auth()->user()->id === $chirp->user_id) @endif -->
                             <x-dropdown>
                                 <x-slot name="trigger">
                                     <button>
-                                        <svg class="w-5 h-5 text-gray-500 dark:text-gray-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"></path>
-                                        </svg>
+                                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-300" data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"></path>
+                                    </svg>
                                     </button>
                                 </x-slot>
                                 <x-slot name="content">
                                     <x-dropdown-link :href="route('chirps.edit', $chirp)">
                                         {{ __('Edit Chirp') }}
                                     </x-dropdown-link>
-                                    <form method="POST" action="{{ route('chirps.destroy', $chirp) }}">
-                                        @csrf @method('DELETE')
-                                        <x-dropdown-link :href="route('chirps.destroy', $chirp)" onclick="event.preventDefault(); this.closest('form').submit();">
-                                            {{ __('Delete Chirp') }}
+                                    <form method="POST" action="{{ route('chirps.destroy', $chirp) }}" >
+                                       @csrf @method('DELETE') 
+                                       <x-dropdown-link :href="route('chirps.destroy', $chirp)" onclick="event.preventDefault(); this.closest('form').submit();">
+                                            {{ __('Delete Chirp')}}
                                         </x-dropdown-link>
                                     </form>
-
+                                    
                                 </x-slot>
                             </x-dropdown>
                         @endcan
-
                     </div>
                 @endforeach
             </div>
